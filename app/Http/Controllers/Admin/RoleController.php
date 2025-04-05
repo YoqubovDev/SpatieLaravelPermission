@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
     public function index()
     {
-        return view('admin.roles.index');
+        $roles=Role::all();
+        return view('admin.roles.index', compact('roles'));
     }
 
     public function create()
@@ -19,8 +21,10 @@ class RoleController extends Controller
 
     public function store(Request $request)
     {
-        // Handle the request to store data
-        // For example, you can save data to the database here
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name',
+        ]);
+        Role::create($validatedData);
         return redirect()->route('admin.roles.index')->with('success', 'Role created successfully!');
     }
 

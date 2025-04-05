@@ -4,12 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 
 class PermissionController extends Controller
 {
     public function index()
     {
-        return view('admin.permissions.index');
+        $permissions = Permission::all();
+        return view('admin.permissions.index', compact('permissions'));
     }
 
     public function create()
@@ -19,14 +21,17 @@ class PermissionController extends Controller
 
     public function store(Request $request)
     {
-        // Handle the request to store data
-        // For example, you can save data to the database here
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:permissions,name',
+        ]);
+        Permission::create($validatedData);
         return redirect()->route('admin.permissions.index')->with('success', 'Permission created successfully!');
     }
 
     public function edit($id)
     {
-        return view('admin.permissions.edit', compact('id'));
+        $permissions =Permission::all();
+        return view('admin.permissions.edit', compact('permissions'));
     }
 
     public function update(Request $request, $id)
