@@ -42,8 +42,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ $role->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    <a href="#" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                    <a href="{{ route('admin.roles.edit', $role->id) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded">Edit</a>
+                                    <a href="#" class="px-4 py-2 bg-red-500 hover:bg-red-700 text-white rounded-md">Delete</a>
                                 </td>
                             </tr>
                         @endforeach

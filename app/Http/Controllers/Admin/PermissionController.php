@@ -28,15 +28,17 @@ class PermissionController extends Controller
         return redirect()->route('admin.permissions.index')->with('success', 'Permission created successfully!');
     }
 
-    public function edit($id)
+    public function edit(Permission $permission)
     {
-        $permissions =Permission::all();
-        return view('admin.permissions.edit', compact('permissions'));
+        return view('admin.permissions.edit', compact('permission'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Permission $permission)
     {
-        // Handle the request to update data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:permissions,name,',
+        ]);
+        $permission->update($validatedData);
         return redirect()->route('admin.permissions.index')->with('success', 'Permission updated successfully!');
     }
 

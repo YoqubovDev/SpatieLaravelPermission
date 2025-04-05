@@ -28,16 +28,20 @@ class RoleController extends Controller
         return redirect()->route('admin.roles.index')->with('success', 'Role created successfully!');
     }
 
-    public function edit($id)
+    public function edit(Role $role)
     {
-        return view('admin.roles.edit', compact('id'));
+        return view('admin.roles.edit', compact('role'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        // Handle the request to update data
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255|unique:roles,name,',
+        ]);
+        $role->update($validatedData);
         return redirect()->route('admin.roles.index')->with('success', 'Role updated successfully!');
     }
+
 
     public function destroy($id)
     {
