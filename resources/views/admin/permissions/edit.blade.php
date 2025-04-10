@@ -13,8 +13,7 @@
                                 <!-- Post name -->
                                 <label for="name" class="block text-sm font-medium text-gray-700">Permission name</label>
                                 <div class="mt-1">
-                                    <input type="text" id="name" wire:model.lazy="name" name="name" value="{{ $permission->name }}"
-                                      class="block w-full transition duration-150 ease-in-out sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                                    <input type="text" id="name" wire:model.lazy="name" name="name" value="{{ $permission->name }}"  class="block w-full transition duration-150 ease-in-out sm:text-sm border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
                                 </div>
                                 @error('name') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>

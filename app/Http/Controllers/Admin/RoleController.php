@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 
 class RoleController extends Controller
 {
     public function index()
     {
-        $roles=Role::all();
+        $roles=Role::whereNotIn('name', ['admin'])->get();
         return view('admin.roles.index', compact('roles'));
     }
 
@@ -30,7 +31,8 @@ class RoleController extends Controller
 
     public function edit(Role $role)
     {
-        return view('admin.roles.edit', compact('role'));
+        $permissions = \Spatie\Permission\Models\Permission::all();
+        return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
     public function update(Request $request, Role $role)
@@ -43,9 +45,24 @@ class RoleController extends Controller
     }
 
 
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        // Handle the request to delete data
+        $role->delete();
         return redirect()->route('admin.roles.index')->with('success', 'Role deleted successfully!');
+    }
+
+    public function givePermissions(Request $request, Role $role)
+    {
+        $request->validate([
+            'permission' => 'required|string|exists:permissions,name',
+        ]);
+
+        $permission = Permission::where('name', $request->permission)->first();
+
+        if ($permission && !$role->hasPermissionTo($permission)) {
+            $role->givePermissionTo($permission);
+        }
+
+        return back()->with('success', 'Permission assigned successfully.');
     }
 }
